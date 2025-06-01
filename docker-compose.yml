@@ -1,0 +1,30 @@
+services:
+  # rabbitmq:
+  #   image: rabbitmq:3-management
+  #   container_name: rabbitmq
+  #   ports:
+  #     - "5672:5672"
+  #     - "15672:15672"
+  #   healthcheck:
+  #     test: ["CMD", "rabbitmq-diagnostics", "check_running"]
+  #     interval: 5s
+  #     timeout: 5s
+  #     retries: 10
+  #   environment:
+  #     RABBITMQ_DEFAULT_USER: guest
+  #     RABBITMQ_DEFAULT_PASS: guest
+
+  nest-backend:
+    container_name: nest-service
+    build:
+      context: ./nest-service
+      dockerfile: Dockerfile
+    ports:
+      - '3001:3000'
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    restart: unless-stopped
+    environment:
+      RABBITMQ_URL: amqp://rabbitmq:5672
+      JWT_SECRET: yourSecretKey
