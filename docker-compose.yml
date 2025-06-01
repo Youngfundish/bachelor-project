@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
 
   nest-backend:
@@ -8,26 +6,7 @@ services:
       context: ./nest-service
       dockerfile: Dockerfile
     ports:
-      - '3001:3000'  # expose backend on 3001
-    depends_on:
-      rabbitmq:
-        condition: service_healthy
+      - '3001:3000'
     restart: unless-stopped
     environment:
       JWT_SECRET: yourSecretKey
-      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
-      NODE_ENV: production
-
-  helperly-frontend:
-    container_name: helperly-app
-    build:
-      context: ./helperly-app
-      dockerfile: Dockerfile
-    ports:
-      - '3000:3000'  # frontend exposed on 3000
-    depends_on:
-      - nest-backend
-    restart: unless-stopped
-    environment:
-      NEXT_PUBLIC_NEST_SERVICE: http://nest-backend:3000
-      NODE_ENV: production
