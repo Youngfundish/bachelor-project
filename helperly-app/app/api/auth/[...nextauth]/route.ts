@@ -1,5 +1,6 @@
-import NextAuthOptions from "@/lib/auth";
+import NextAuth from "next-auth"
+import { authOptions } from "@/lib/auth" // Note: named import, not default
 
-export const handler = NextAuthOptions;
+const handler = NextAuth(authOptions) // Call NextAuth() with your options
 
-export { handler as GET, handler as POST };
+export { handler as GET, handler as POST }

@@ -1,10 +1,10 @@
 'use client'
 import { useEffect, useState } from 'react';
-import {redirect, useRouter} from 'next/navigation';
+import {useRouter} from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import {signIn, useSession} from "next-auth/react";
+import {signIn} from "next-auth/react";
 import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "@/components/ui/card";
 import {Dumbbell, Eye, EyeOff} from "lucide-react";
 import {Label} from "@/components/ui/label";
@@ -148,7 +148,7 @@ export default function LoginPage() {
               Forgot your password?
             </Button>
             <div className="text-sm text-muted-foreground text-center">
-              Don't have an account?{' '}
+              Don&apos;t have an account?
               <Link href="/register" passHref>
                 <Button variant="link" className="p-0 h-auto font-semibold">
                   Sign up

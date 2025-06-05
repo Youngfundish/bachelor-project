@@ -21,7 +21,7 @@ export default function SolutionsList() {
             const data = await response.json();
             setSolutions(data);
         } catch (error) {
-            
+            console.log(error)
         }
     };
 

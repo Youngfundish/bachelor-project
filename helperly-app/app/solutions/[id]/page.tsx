@@ -34,13 +34,12 @@ export default function SolutionDetailPage() {
               const data = await response.json();
               setSolution(data);
           } catch (error) {
-              
+              console.log(error)
           }
       };
     fetchSolution().then(r => r);
     setLoading(false)
   }, [params.id, router])
-  // console.dir(solution);
 
   if (loading) {
     return (

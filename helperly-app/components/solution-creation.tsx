@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { Loader2, Save } from "lucide-react"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
 
@@ -81,9 +80,9 @@ export default function CreateSolutionPage() {
       toast.success("Solution created successfully!")
 
       router.push("/solutions")
-    } catch (error: any) {
+    } catch (error) {
       console.error("Error creating solution:", error)
-      toast.error(`Error: ${error.message}`)
+      toast.error(`Error: ${error}`)
     } finally {
       setIsSubmitting(false)
     }

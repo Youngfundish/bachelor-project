@@ -1,6 +1,4 @@
 import CreateSolutionPage from "@/components/solution-creation";
-import SolutionForm from "@/components/solution-form"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";

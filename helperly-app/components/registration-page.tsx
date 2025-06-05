@@ -12,7 +12,7 @@ import { useRouter } from "next/navigation"
 import { useState } from "react"
 
 export default function RegistrationComponent() {
-  const [isLoading, setIsLoading] = useState(false)
+  const [, setIsLoading] = useState(false)
   const router = useRouter()
   const form = useForm<RegistrationSchema>({
     resolver: zodResolver(registrationSchema),
@@ -42,8 +42,8 @@ export default function RegistrationComponent() {
 
       router.push('/login?registered=1')
       setIsLoading(false)
-    } catch (error: any) {
-      toast.error(`Error: ${error.message}`)
+    } catch (error) {
+      toast.error(`Error: ${error}`)
     }
   }
 
