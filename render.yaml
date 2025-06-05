@@ -25,7 +25,8 @@ services:
     buildCommand: |
       cd nest-service
       npm install
-      npm run build
+      npx prisma generate
+      npx nest build
     startCommand: |
       cd nest-service
       npm run start:prod
