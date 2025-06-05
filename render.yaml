@@ -32,5 +32,5 @@ services:
     envVars:
       - key: JWT_SECRET
         value: yourSecretKey
-      - key: NODE_ENV
+      - key: NODE_ENV=production
         value: production
