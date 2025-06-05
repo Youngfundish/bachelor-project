@@ -24,7 +24,6 @@ services:
     plan: free
     buildCommand: |
       cd nest-service
-      npm install @nestjs/cli
       npm install
       npm run build
     startCommand: |
