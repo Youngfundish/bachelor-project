@@ -20,7 +20,7 @@ services:
 
   - type: web
     name: backend
-    env: docker
+    env: node
     plan: free
     buildCommand: |
       cd nest-service
@@ -28,9 +28,9 @@ services:
       npm run build
     startCommand: |
       cd nest-service
-      npm run start:prod
+      npm run start:dev
     envVars:
       - key: JWT_SECRET
         value: yourSecretKey
-      - key: NODE_ENV=production
+      - key: NODE_ENV
         value: production
