@@ -25,10 +25,11 @@ services:
     buildCommand: |
       cd nest-service
       npm install
+      npx prisma generate
       npm run build
     startCommand: |
       cd nest-service
-      npm run start:dev
+      npm run start
     envVars:
       - key: JWT_SECRET
         value: yourSecretKey
