@@ -12,7 +12,7 @@ import { SolutionSchema } from "@/types/solution"
 import { useSession } from "next-auth/react"
 
 export default function SolutionDetailPage() {
-  useSession({
+  const { data: session } = useSession({
     required: true,
     onUnauthenticated() {
       redirect("/login")
@@ -27,7 +27,11 @@ export default function SolutionDetailPage() {
   useEffect(() => {
       const fetchSolution = async () => {
           try {
-              const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_SERVICE}/solutions/${params.id}`);
+              const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_SERVICE}/solutions/${params.id}`,{
+              method: 'GET',
+              headers: {
+                'Authorization': `Bearer ${session?.token}`
+          }});
               if (!response.ok) {
                   throw new Error('Failed to fetch solutions');
               }

@@ -1,7 +1,9 @@
-import { Controller, Post, Body, Get, Param, Delete } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Delete, UseGuards } from '@nestjs/common';
 import { SolutionService } from './solution.service';
 import { SolutionCreateInput } from './dto/solutiuonCreationInput.model';
+import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
 
+@UseGuards(JwtAuthGuard)
 @Controller('solutions')
 export class SolutionController {
   constructor(private readonly solutionService: SolutionService) {}

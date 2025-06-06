@@ -10,7 +10,7 @@ export default async function NewSolutionPage() {
       }
   return (
     <div className="min-h-screen p-8 bg-background text-foreground">
-      <CreateSolutionPage />
+      <CreateSolutionPage userEmail={session?.user.email}/>
     </div>
   )
 }

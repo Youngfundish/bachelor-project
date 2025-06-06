@@ -2,7 +2,6 @@
 
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 export default function LocationInfoForm({ form, solutionModes }) {
   return (
@@ -21,33 +20,6 @@ export default function LocationInfoForm({ form, solutionModes }) {
           </FormItem>
         )}
       />
-
-      <FormField
-        control={form.control}
-        name="mode"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Mode</FormLabel>
-            <Select onValueChange={field.onChange} defaultValue={field.value}>
-              <FormControl>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select mode" />
-                </SelectTrigger>
-              </FormControl>
-              <SelectContent>
-                {solutionModes.map((mode) => (
-                  <SelectItem key={mode} value={mode}>
-                    {mode}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <FormDescription>The operational mode of the solution</FormDescription>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-
       <FormField
         control={form.control}
         name="email"

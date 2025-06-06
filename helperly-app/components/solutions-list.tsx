@@ -8,13 +8,22 @@ import { Button } from "@/components/ui/button"
 import { Edit, Eye, PlusCircle } from "lucide-react"
 import { SolutionSchema } from "@/types/solution"
 
-export default function SolutionsList() {
+interface TokenProps{
+  token?: string
+}
+
+export default function SolutionsList({token}: TokenProps) {
   const [solutions, setSolutions] = useState<SolutionSchema[]>([])
 
   useEffect(() => {
     const fetchSolutions = async () => {
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_SERVICE}/solutions`);
+            const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_SERVICE}/solutions`,{
+              method: 'GET',
+              headers: {
+                'Authorization': `Bearer ${token}`
+              }
+            });
             if (!response.ok) {
                 throw new Error('Failed to fetch solutions');
             }
@@ -75,8 +84,8 @@ export default function SolutionsList() {
                 <span className="text-sm text-muted-foreground">{solution.location}</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm font-medium">Mode:</span>
-                <span className="text-sm text-muted-foreground">{solution.mode}</span>
+                <span className="text-sm font-medium">Section:</span>
+                <span className="text-sm text-muted-foreground">{solution.defaultSectionName}</span>
               </div>
             </div>
           </CardContent>

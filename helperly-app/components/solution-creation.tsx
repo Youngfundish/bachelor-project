@@ -3,47 +3,28 @@
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { z } from "zod"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
+import { CreateSolutionSchema, createSolutionSchema } from "@/types/solution"
 
-const createSolutionSchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  description: z.string().min(1, "Description is required"),
-  location: z.string().min(1, "Location is required"),
-  content: z.string().min(1, "Content is required"),
-  problem: z.string().min(1, "Problem description is required"),
-  title: z.string().min(1, "Title is required"),
-  solutionDetails: z.object({
-    title: z.string().min(1, "Solution title is required"),
-    description: z.string().min(1, "Solution description is required"),
-    rootCause: z.string().min(1, "Root cause is required"),
-    countermeasure: z.string().min(1, "Countermeasure is required"),
-  }),
-  email: z.string().email("Please enter a valid email address"),
-})
+interface CreateSolutionProps {
+  userEmail?: string;
+  token?: string;
+}
 
-type CreateSolutionSchema = z.infer<typeof createSolutionSchema>
-
-export default function CreateSolutionPage() {
+export default function CreateSolutionPage({userEmail, token}: CreateSolutionProps) {
   const router = useRouter()
   const [isSubmitting, setIsSubmitting] = useState(false)
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<CreateSolutionSchema>({
+  const form = useForm<CreateSolutionSchema>({
     resolver: zodResolver(createSolutionSchema),
     defaultValues: {
       name: "",
       description: "",
       location: "",
-      content: "",
       problem: "",
       title: "",
       solutionDetails: {
@@ -52,20 +33,34 @@ export default function CreateSolutionPage() {
         rootCause: "",
         countermeasure: "",
       },
-      email: "",
+      email: userEmail,
     },
   })
 
   async function onSubmit(values: CreateSolutionSchema) {
     console.log("🚀 onSubmit triggered", values);
     setIsSubmitting(true)
+    const backendPayload = {
+      ...values,
+      kind: "simpleSolution", // default value
+      mode: "createFromNew",  // default value
+      status: "draft",        // default value
+      defaultSectionId: "",
+      defaultSectionName: "",
+      defaultSubSectionId: "",
+      defaultSubSectionName: "",
+      defaultEventId: "",
+      defaultEventName: "",
+      content: "",
+    };
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_SERVICE}/solutions`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify(values),
+        body: JSON.stringify(backendPayload),
       })
 
       if (!response.ok) {
@@ -97,7 +92,7 @@ export default function CreateSolutionPage() {
         </p>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         {/* Basic Information */}
         <Card>
           <CardHeader>
@@ -107,26 +102,26 @@ export default function CreateSolutionPage() {
           <CardContent className="space-y-6">
             <div>
               <label className="block font-medium mb-1">Name</label>
-              <Input {...register("name")} placeholder="Solution name" />
-              {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
+              <Input {...form.register("name")} placeholder="Solution name" />
+              {form.formState.errors.name && <p className="text-red-500 text-sm">{form.formState.errors.name.message}</p>}
             </div>
 
             <div>
               <label className="block font-medium mb-1">Description</label>
-              <Textarea {...register("description")} placeholder="Solution description" />
-              {errors.description && <p className="text-red-500 text-sm">{errors.description.message}</p>}
+              <Textarea {...form.register("description")} placeholder="Solution description" />
+              {form.formState.errors.description && <p className="text-red-500 text-sm">{form.formState.errors.description.message}</p>}
             </div>
 
             <div>
               <label className="block font-medium mb-1">Location</label>
-              <Input {...register("location")} placeholder="Location" />
-              {errors.location && <p className="text-red-500 text-sm">{errors.location.message}</p>}
+              <Input {...form.register("location")} placeholder="Location" />
+              {form.formState.errors.location && <p className="text-red-500 text-sm">{form.formState.errors.location.message}</p>}
             </div>
 
             <div>
               <label className="block font-medium mb-1">Email</label>
-              <Input type="email" {...register("email")} placeholder="your.email@example.com" />
-              {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
+              <Input type="email" {...form.register("email")} placeholder="your.email@example.com" />
+              {form.formState.errors.email && <p className="text-red-500 text-sm">{form.formState.errors.email.message}</p>}
             </div>
           </CardContent>
         </Card>
@@ -140,15 +135,10 @@ export default function CreateSolutionPage() {
           <CardContent className="space-y-6">
             <div>
               <label className="block font-medium mb-1">Problem</label>
-              <Textarea {...register("problem")} placeholder="Problem description" />
-              {errors.problem && <p className="text-red-500 text-sm">{errors.problem.message}</p>}
+              <Textarea {...form.register("problem")} placeholder="Problem description" />
+              {form.formState.errors.problem && <p className="text-red-500 text-sm">{form.formState.errors.problem.message}</p>}
             </div>
 
-            <div>
-              <label className="block font-medium mb-1">Content</label>
-              <Textarea {...register("content")} placeholder="Content" />
-              {errors.content && <p className="text-red-500 text-sm">{errors.content.message}</p>}
-            </div>
           </CardContent>
         </Card>
 
@@ -161,39 +151,33 @@ export default function CreateSolutionPage() {
           <CardContent className="space-y-6">
             <div>
               <label className="block font-medium mb-1">Solution Title</label>
-              <Input {...register("solutionDetails.title")} placeholder="Solution Title" />
-              {errors.solutionDetails?.title && <p className="text-red-500 text-sm">{errors.solutionDetails.title.message}</p>}
+              <Input {...form.register("solutionDetails.title")} placeholder="Solution Title" />
+              {form.formState.errors.solutionDetails?.title && <p className="text-red-500 text-sm">{form.formState.errors.solutionDetails.title.message}</p>}
             </div>
 
             <div>
               <label className="block font-medium mb-1">Solution Description</label>
-              <Textarea {...register("solutionDetails.description")} placeholder="Solution Description" />
-              {errors.solutionDetails?.description && <p className="text-red-500 text-sm">{errors.solutionDetails.description.message}</p>}
+              <Textarea {...form.register("solutionDetails.description")} placeholder="Solution Description" />
+              {form.formState.errors.solutionDetails?.description && <p className="text-red-500 text-sm">{form.formState.errors.solutionDetails.description.message}</p>}
             </div>
 
             <div>
               <label className="block font-medium mb-1">Root Cause</label>
-              <Textarea {...register("solutionDetails.rootCause")} placeholder="Root Cause" />
-              {errors.solutionDetails?.rootCause && <p className="text-red-500 text-sm">{errors.solutionDetails.rootCause.message}</p>}
+              <Textarea {...form.register("solutionDetails.rootCause")} placeholder="Root Cause" />
+              {form.formState.errors.solutionDetails?.rootCause && <p className="text-red-500 text-sm">{form.formState.errors.solutionDetails.rootCause.message}</p>}
             </div>
 
             <div>
               <label className="block font-medium mb-1">Countermeasure</label>
-              <Textarea {...register("solutionDetails.countermeasure")} placeholder="Countermeasure" />
-              {errors.solutionDetails?.countermeasure && <p className="text-red-500 text-sm">{errors.solutionDetails.countermeasure.message}</p>}
+              <Textarea {...form.register("solutionDetails.countermeasure")} placeholder="Countermeasure" />
+              {form.formState.errors.solutionDetails?.countermeasure && <p className="text-red-500 text-sm">{form.formState.errors.solutionDetails.countermeasure.message}</p>}
             </div>
           </CardContent>
         </Card>
 
-        {/* Submit button */}
-        <div className="flex justify-end space-x-4">
-          <Button type="button" variant="outline">
-            Cancel
-          </Button>
-          <Button type="submit" disabled={isSubmitting}>
+          <Button type="submit">
             Create Solution
           </Button>
-        </div>
       </form>
     </div>
   )
