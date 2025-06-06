@@ -10,13 +10,14 @@ import { Textarea } from "@/components/ui/textarea"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
 import { CreateSolutionSchema, createSolutionSchema } from "@/types/solution"
+import { useSession } from "next-auth/react"
 
 interface CreateSolutionProps {
   userEmail?: string;
-  token?: string;
 }
 
-export default function CreateSolutionPage({userEmail, token}: CreateSolutionProps) {
+export default function CreateSolutionPage({userEmail}: CreateSolutionProps) {
+  const {data: session} = useSession()
   const router = useRouter()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const form = useForm<CreateSolutionSchema>({
@@ -58,7 +59,7 @@ export default function CreateSolutionPage({userEmail, token}: CreateSolutionPro
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          'Authorization': `Bearer ${token}`
+          'Authorization': `Bearer ${session?.token}`
         },
         body: JSON.stringify(backendPayload),
       })

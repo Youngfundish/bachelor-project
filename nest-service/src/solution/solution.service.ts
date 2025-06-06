@@ -1,13 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { SolutionCreateInput } from './dto/solutiuonCreationInput.model';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class SolutionService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService, private readonly eventEmitter: EventEmitter2) {}
 
   async create(data: SolutionCreateInput) {
-    return await this.prisma.solution.create({ data });
+    const res = await this.prisma.solution.create({ data });
+    this.eventEmitter.emit('audit.activity', {
+      userId: data.email,
+      action: 'solution.creation',
+      timestamp: new Date(),
+    });
+    return res
   }
 
   findAll() {
