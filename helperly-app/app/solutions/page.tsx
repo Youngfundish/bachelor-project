@@ -25,7 +25,7 @@ export default async function HomePage() {
           </Button>
         </Link>
       </div>
-      <SolutionsList />
+      <SolutionsList token={session.token}/>
     </div>
   )
 }
