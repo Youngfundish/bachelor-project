@@ -15,7 +15,7 @@ jobs:
 
     env:
       DATABASE_URL: mongodb+srv://bachelor-project:jNCehR4JDcUK3zwL@cluster0.kpvblu0.mongodb.net/solutionsDB?retryWrites=true&w=majority&appName=Cluster0
-      JWT_SECRET:     test-secret
+      JWT_SECRET: test-secret
 
     defaults:
       run:
