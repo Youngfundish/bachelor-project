@@ -20,16 +20,39 @@ export class SolutionService {
   findAll() {
     return this.prisma.solution.findMany({
       include: {
-        solutionDetails: true,  // Include the related SolutionDetails model
+        solutionDetails: true,
       },
+      where: {
+        isDeleted: false
+      }
     });
   }
 
   findOne(id: string) {
-    return this.prisma.solution.findUnique({ where: { id } });
+    return this.prisma.solution.findUnique({ where: {
+      id,
+      isDeleted: false,
+    },
+    include: {
+      solutionDetails: true,
+    },
+   });
   }
 
-  delete(id: string) {
-    return this.prisma.solution.delete({ where: { id } });
+  async delete(id: string) {
+    const res = await this.prisma.solution.update({
+      where: { id },
+      data: {
+        isDeleted: true,
+        deletedAt: new Date(),
+      },
+    });
+    this.eventEmitter.emit('audit.activity', {
+      userId: null,
+      action: 'solution.deleted',
+      timestamp: new Date(),
+      metaData: {'solutionId': id}
+    });
+    return res;
   }
 }

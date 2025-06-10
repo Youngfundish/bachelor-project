@@ -7,8 +7,44 @@ import { parse } from "cookie";
 declare module "next-auth" {
     interface User {
         accessToken?: string;
+        refreshToken?: string;
     }
 }
+
+async function refreshAccessToken(token: any) {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_SERVICE}/auth/refresh`, {
+        method: "POST",
+        credentials: "include", // Important: send cookies
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            refreshToken: token.refreshToken,  // use the refreshToken you stored in JWT
+          }),
+      });
+  
+      if (!response.ok) {
+        throw new Error("Failed to refresh access token");
+      }
+  
+      const data = await response.json();
+  
+      return {
+        ...token,
+        accessToken: data.access_token,
+        accessTokenExpires: Date.now() + 15 * 60 * 1000, // 15 minutes
+        refreshToken: token.refreshToken, // keep the same (cookie-based)
+      };
+    } catch (error) {
+      console.error("Error refreshing access token:", error);
+  
+      return {
+        ...token,
+        error: "RefreshAccessTokenError",
+      };
+    }
+  }
 
 // Configuration options for NextAuth
 export const authOptions: NextAuthOptions = {
@@ -48,13 +84,15 @@ export const authOptions: NextAuthOptions = {
 
                     const cookies = parse(cookieHeader);
                     const accessToken = cookies.accessToken;
+                    const refreshToken = cookies.refreshToken;
                     if (!accessToken) {
                         throw new Error('Access token missing in cookies');
                     }
+                    console.log(cookies)
 
                     // Return user object with access token for subsequent operations
                     const user = { id: 'user-id', email: credentials?.email };
-                    return { ...user, accessToken };
+                    return { ...user, accessToken, refreshToken };
                 } catch (error) {
                     // Log and handle errors during the authorization process
                     console.error("Error during authorization:", error);
@@ -68,6 +106,7 @@ export const authOptions: NextAuthOptions = {
             // Add the access token from the user object to the token
             if (user && user.accessToken) {
                 token.accessToken = user.accessToken;
+                token.refreshToken = user.refreshToken;
             }
 
             // Decode the access token to extract user details
@@ -86,11 +125,18 @@ export const authOptions: NextAuthOptions = {
                 token.role = decodedToken.role;
                 token.exp = decodedToken.exp;
             }
-            return token; // Return the updated token
+            // If token is still valid, return it
+            if (Date.now() < (token.exp as number) * 1000) {
+                return token;
+            }
+
+            // Otherwise, refresh it
+            return await refreshAccessToken(token);
         },
         async session({ session, token }) {
             // Add the raw access token to the session
             session.token = token.accessToken as string;
+            session.refreshToken = token.refreshToken;
             // Populate session user details
             session.user.userId = token.userId;
             session.user.email = token.email;

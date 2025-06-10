@@ -3,7 +3,7 @@
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 
-export default function LocationInfoForm({ form, solutionModes }) {
+export default function LocationInfoForm({ form }) {
   return (
     <div className="space-y-6">
       <FormField

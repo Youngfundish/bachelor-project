@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button"
 import { Form } from "@/components/ui/form"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { solutionKinds, solutionModes, solutionStatuses } from "@/lib/mock-data"
 import BasicInfoForm from "@/components/form-sections/basic-info-form"
 import LocationInfoForm from "@/components/form-sections/location-info-form"
 import DefaultSettingsForm from "@/components/form-sections/default-settings-form"
@@ -118,7 +117,7 @@ export default function SolutionForm({ initialData }: SolutionFormProps) {
                 <CardDescription>Enter location and contact details</CardDescription>
               </CardHeader>
               <CardContent>
-                <LocationInfoForm form={form} solutionModes={solutionModes} />
+                <LocationInfoForm form={form} />
                 <div className="flex justify-between mt-6">
                   <Button type="button" variant="outline" onClick={prevTab}>
                     Previous

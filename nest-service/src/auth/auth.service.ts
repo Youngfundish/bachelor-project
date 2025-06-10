@@ -76,7 +76,7 @@ export class AuthService {
     }
   }
 
-  private signToken(user: any) {
+  signToken(user: any) {
     const access_token = this.jwtService.sign(
       {
         userId: user.id,
@@ -95,11 +95,28 @@ export class AuthService {
         email: user.email,
       },
       {
-        secret: process.env.REFRESH_TOKEN_SECRET, // use different secret!
+        secret: process.env.REFRESH_TOKEN_SECRET,
         expiresIn: '7d', // refresh token 7 days
       }
     );
   
     return { access_token, refresh_token };
+  }
+
+  async findUserById(userId: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+    });
+  
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+  
+    return {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      role: user.role,
+    };
   }
 }

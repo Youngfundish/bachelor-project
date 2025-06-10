@@ -4,6 +4,7 @@ import { PrismaModule } from '../prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
 import { AuditModule } from './audit/audit.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { AuditAnalysisModule } from './analysis/analysis.module';
 
 @Module({
   imports: [
@@ -11,7 +12,8 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
     SolutionModule,
     PrismaModule,
     AuthModule,
-    AuditModule 
+    AuditModule,
+    AuditAnalysisModule
   ],
 })
 export class AppModule {}

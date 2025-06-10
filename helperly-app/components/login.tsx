@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import {signIn} from "next-auth/react";
 import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "@/components/ui/card";
-import {Dumbbell, Eye, EyeOff} from "lucide-react";
+import {HelpingHandIcon, Eye, EyeOff} from "lucide-react";
 import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
@@ -82,7 +82,7 @@ export default function LoginPage() {
         <Card className="w-full max-w-md">
           <CardHeader className="space-y-1">
             <div className="flex items-center justify-center mb-4">
-              <Dumbbell className="h-12 w-12 text-primary"/>
+              <HelpingHandIcon className="h-12 w-12 text-primary"/>
             </div>
             <CardTitle className="text-2xl font-bold text-center">Login to Helperly</CardTitle>
             <CardDescription className="text-center">
