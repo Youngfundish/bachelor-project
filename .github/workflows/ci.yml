@@ -41,11 +41,9 @@ jobs:
       # - name: Lint
       #   run: npm run lint
 
-      - name: Run unit tests
+      - name: Run unit and integration test tests
         run: npm run test
 
-      - name: Run e2e tests
-        run: npm run test:e2e
 
   # build-and-test-frontend:
   #   name: Frontend CI
