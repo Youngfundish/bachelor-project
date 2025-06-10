@@ -1,7 +1,7 @@
 import { Controller, Post, Body, Get, Param, Delete, UseGuards } from '@nestjs/common';
 import { SolutionService } from './solution.service';
 import { SolutionCreateInput } from './dto/solutiuonCreationInput.model';
-import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
+import { JwtAuthGuard } from '../auth/jwt/jwt.guard';
 import { ApiTags } from '@nestjs/swagger';
 
 @UseGuards(JwtAuthGuard)

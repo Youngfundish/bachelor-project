@@ -7,6 +7,8 @@ import { PrismaService } from '../../prisma/prisma.service';
 describe('SolutionsController (integration)', () => {
   let app: INestApplication;
   let prisma: PrismaService;
+  let authToken: string;
+
 
   // Store created solution id for later tests
   let createdSolutionId: string;
@@ -20,11 +22,27 @@ describe('SolutionsController (integration)', () => {
     await app.init();
 
     prisma = app.get(PrismaService);
+
+    await getAuthToken();
   });
 
   afterAll(async () => {
     await app.close();
   });
+
+  // Method to get authentication token
+  async function getAuthToken() {
+    // Option 1: Login with existing test user
+    const loginResponse = await request(app.getHttpServer())
+      .post('/auth/login')
+      .send({
+        email: 'john5@test.com',
+        password: 'Ab123&'
+      });
+    
+    authToken = loginResponse.body.accessToken;
+    console.log(authToken)
+  }
 
   const testSolution = {
     name: 'Test Solution',
@@ -54,6 +72,7 @@ describe('SolutionsController (integration)', () => {
   it('POST /solutions → should create a solution', async () => {
     const response = await request(app.getHttpServer())
       .post('/solutions')
+      .set('Authorization', `Bearer ${authToken}`)
       .send(testSolution)
       .expect(201);
 
@@ -66,6 +85,7 @@ describe('SolutionsController (integration)', () => {
   it('GET /solutions → should return array of solutions', async () => {
     const response = await request(app.getHttpServer())
       .get('/solutions')
+      .set('Authorization', `Bearer ${authToken}`)
       .expect(200);
 
     expect(Array.isArray(response.body)).toBe(true);
@@ -75,20 +95,22 @@ describe('SolutionsController (integration)', () => {
   it('GET /solutions/:id → should return one solution', async () => {
     const response = await request(app.getHttpServer())
       .get(`/solutions/${createdSolutionId}`)
+      .set('Authorization', `Bearer ${authToken}`)
       .expect(200);
 
     expect(response.body).toHaveProperty('id', createdSolutionId);
     expect(response.body.name).toBe(testSolution.name);
   });
 
-//   it('DELETE /solutions/:id → should delete solution', async () => {
-//     await request(app.getHttpServer())
-//       .delete(`/solutions/${createdSolutionId}`)
-//       .expect(200);
+  // it('DELETE /solutions/:id → should delete solution', async () => {
+  //   await request(app.getHttpServer())
+  //     .delete(`/solutions/${createdSolutionId}`)
+  //     .set('Authorization', `Bearer ${authToken}`)
+  //     .expect(200);
 
-//     // Verify it's deleted
-//     await request(app.getHttpServer())
-//       .get(`/solutions/${createdSolutionId}`)
-//       .expect(404);
-//   });
+  //   // Verify it's deleted
+  //   await request(app.getHttpServer())
+  //     .get(`/solutions/${createdSolutionId}`)
+  //     .expect(404);
+  // });
 });

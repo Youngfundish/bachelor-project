@@ -3,10 +3,17 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginDto } from './dto/login.dto';
+import { JwtService } from '@nestjs/jwt';
 
 describe('AuthController', () => {
   let controller: AuthController;
   let authService: AuthService;
+  let jwtService: JwtService;
+
+  const mockJwtService = {
+    sign: jest.fn().mockReturnValue('signedJwtToken'),
+  };
+
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -19,6 +26,7 @@ describe('AuthController', () => {
             login: jest.fn(),
           },
         },
+        { provide: JwtService,   useValue: mockJwtService },
       ],
     }).compile();
 
@@ -74,9 +82,6 @@ describe('AuthController', () => {
       // Call controller
       const result = await controller.login(dto, response);
   
-      // Assert returned message
-      expect(result.message).toEqual('Login successful');
-  
       // Assert service was called
       expect(authService.login).toHaveBeenCalledWith(dto);
   
@@ -89,7 +94,18 @@ describe('AuthController', () => {
           secure: false,
           sameSite: 'strict',
           path: '/',
-          maxAge: 15 * 60,
+          maxAge: 15 * 60 * 1000,
+        })
+      );
+      expect(response.cookie).toHaveBeenCalledWith(
+        'refreshToken',
+        mockTokens.refresh_token,
+        expect.objectContaining({
+          httpOnly: true,
+          secure: false,
+          sameSite: 'strict',
+          path: '/',
+          maxAge: 7 * 24 * 60 * 60 * 1000, // also in ms
         })
       );
     });

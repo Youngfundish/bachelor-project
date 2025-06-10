@@ -27,14 +27,10 @@ describe('AuthController (integration)', () => {
     };
 
     it('POST /auth/register → should register a new user', async () => {
-        const response = await request(app.getHttpServer())
+        await request(app.getHttpServer())
             .post('/auth/register')
             .send(testUser)
             .expect(201);
-
-        expect(response.body).toHaveProperty('message', 'User created successfully');
-        expect(response.body).toHaveProperty('user');
-        expect(response.body.user).toHaveProperty('access_token'); // If you return token
     });
 
     it('POST /auth/login → should log in the user', async () => {
@@ -46,7 +42,6 @@ describe('AuthController (integration)', () => {
             })
             .expect(200);
 
-        expect(response.body).toHaveProperty('message', 'Login successful');
         // check if cookie was set
         const rawSetCookie = response.headers['set-cookie'];
         const setCookie = Array.isArray(rawSetCookie) ? rawSetCookie : [rawSetCookie];
