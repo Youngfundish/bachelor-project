@@ -39,7 +39,7 @@ export default function CreateSolutionPage({userEmail}: CreateSolutionProps) {
   })
 
   async function onSubmit(values: CreateSolutionSchema) {
-    console.log("🚀 onSubmit triggered", values);
+    console.log("onSubmit triggered", values);
     setIsSubmitting(true)
     const backendPayload = {
       ...values,

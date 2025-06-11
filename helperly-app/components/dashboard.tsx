@@ -49,7 +49,7 @@ export default function DashboardPage() {
   useEffect(() => {
     const fetchSolutions = async () => {
       try {
-          const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_SERVICE}/audit-analysis/overview`,{
+          const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_SERVICE}/analysis/overview`,{
             method: 'GET',
             headers: {
               'Authorization': `Bearer ${session?.token}`
