@@ -101,16 +101,4 @@ describe('SolutionsController (integration)', () => {
     expect(response.body).toHaveProperty('id', createdSolutionId);
     expect(response.body.name).toBe(testSolution.name);
   });
-
-  // it('DELETE /solutions/:id → should delete solution', async () => {
-  //   await request(app.getHttpServer())
-  //     .delete(`/solutions/${createdSolutionId}`)
-  //     .set('Authorization', `Bearer ${authToken}`)
-  //     .expect(200);
-
-  //   // Verify it's deleted
-  //   await request(app.getHttpServer())
-  //     .get(`/solutions/${createdSolutionId}`)
-  //     .expect(404);
-  // });
 });

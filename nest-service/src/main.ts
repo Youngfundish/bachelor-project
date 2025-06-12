@@ -21,24 +21,11 @@ async function bootstrap() {
     .setTitle('Solutions API')
     .setDescription('The solutions API description')
     .setVersion('1.0')
-    .addBearerAuth(
-      {
-        type: 'http',
-        scheme: 'bearer',
-        bearerFormat: 'JWT',
-        description: 'JWT here',
-      },
-      'access-token', 
-    )
-    // .addTag('solutions')
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, documentFactory, {
-    swaggerOptions: {
-      persistAuthorization: true,
-    },
   });
 
-  await app.listen(process.env.PORT || 3000);
+  await app.listen(process.env.PORT || 3001);
 }
 bootstrap();

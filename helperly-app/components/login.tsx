@@ -60,7 +60,7 @@ export default function LoginPage() {
 
       if (result?.error) {
         toast.error('Login failed');
-        return; // correctly inside if-block now
+        return; 
       }
     
       // Successful login

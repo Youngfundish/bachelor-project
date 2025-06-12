@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
-import { AuditAnalysisController } from './analysis.controller';
-import { AuditAnalysisService } from './analysis.service';
+import { AnalysisController } from './analysis.controller';
+import { AnalysisService } from './analysis.service';
 import { PrismaService } from '../../prisma/prisma.service'; // Adjust path as needed
 
 @Module({
-  controllers: [AuditAnalysisController],
-  providers: [AuditAnalysisService, PrismaService],
-  exports: [AuditAnalysisService],
+  controllers: [AnalysisController],
+  providers: [AnalysisService, PrismaService],
+  exports: [AnalysisService],
 })
-export class AuditAnalysisModule {}
+export class AnalysisModule {}

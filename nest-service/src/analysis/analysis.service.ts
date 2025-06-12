@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service'; // Adjust path as needed
 
 @Injectable()
-export class AuditAnalysisService {
+export class AnalysisService {
   constructor(private prisma: PrismaService) {}
 
   async getLoginAnalysis(filters: { startDate?: Date; endDate?: Date }) {

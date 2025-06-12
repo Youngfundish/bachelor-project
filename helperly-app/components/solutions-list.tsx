@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Edit, Eye, PlusCircle, Search } from "lucide-react"
+import { Edit, Eye, Search } from "lucide-react"
 import { SolutionSchema } from "@/types/solution"
 
 interface TokenProps {
@@ -66,11 +66,6 @@ export default function SolutionsList({ token }: TokenProps) {
           onChange={(e) => setQuery(e.target.value)}
           className="flex-1 rounded border px-3 py-2 focus:outline-none focus:ring"
         />
-        <Link href="/solutions/new">
-          <Button size="sm">
-            <PlusCircle className="mr-2 h-4 w-4" /> New
-          </Button>
-        </Link>
       </div>
 
       {/* No results */}
@@ -87,8 +82,8 @@ export default function SolutionsList({ token }: TokenProps) {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {solutions.map((sol) => (
-            <Card key={sol.id} className="flex flex-col">
+          {solutions.map((sol, index) => (
+            <Card key={sol.id ?? `solution-${index}`} className="flex flex-col">
               <CardHeader>
                 <div className="flex justify-between items-start">
                   <CardTitle className="line-clamp-1">

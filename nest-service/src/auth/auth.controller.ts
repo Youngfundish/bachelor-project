@@ -64,7 +64,10 @@ export class AuthController {
         maxAge: 7 * 24 * 60 * 60 * 1000,
       });
       
-      return {accessToken: token.access_token};
+      return {
+        accessToken: token.access_token,
+        refreshToken: token.refresh_token
+      };
     } catch (error) {
       if (error instanceof HttpException) throw error;
 

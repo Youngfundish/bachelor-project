@@ -48,6 +48,11 @@ export class SolutionService {
           }
         }
       },
+      {
+        $match: {
+          isDeleted: false
+        }
+      },
       { $limit: 20 },
     ];
 
@@ -56,7 +61,6 @@ export class SolutionService {
       pipeline,
       cursor: {},
     })) as unknown as AtlasSearchResult;
-    console.log(raw)
 
     return raw.cursor.firstBatch;
   }
