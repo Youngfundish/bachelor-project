@@ -12,18 +12,10 @@ import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
 import { Toaster } from "@/components/ui/sonner"
 import Link from "next/link";
-import { loginSchema } from '@/types/login'
+import { LoginSchema, loginSchema } from '@/types/login'
 import { toast } from 'sonner';
 
 
-
-// Your existing login schema
-const LoginSchema = z.object({
-  email: z.string().email("Invalid email address"),
-  password: z.string().min(1, "Password is required")
-});
-
-type LoginSchema = z.infer<typeof LoginSchema>;
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)

@@ -20,7 +20,7 @@ export class AuditService {
       });
     } catch (err) {
       console.error('Failed inside saveActivity:', err);
-      throw err; // optional: rethrow or swallow
+      throw err;
     }
   }
 }

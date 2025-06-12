@@ -98,7 +98,6 @@ async refresh(@Body() body: { refreshToken?: string }, @Req() req: Request, @Res
 
         const newTokens = this.authService.signToken(user);
 
-        // Optionally update cookies again
         res.cookie('accessToken', newTokens.access_token, {
             httpOnly: true,
             secure: false, // set true in production
@@ -113,7 +112,6 @@ async refresh(@Body() body: { refreshToken?: string }, @Req() req: Request, @Res
             maxAge: 7 * 24 * 60 * 60 * 1000,
         });
 
-        // Return tokens so client can update them if needed
         return {
             access_token: newTokens.access_token,
             refresh_token: newTokens.refresh_token,
