@@ -112,21 +112,6 @@ export default function DashboardPage() {
                 </Card>
               </div>
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-                <Card className="col-span-4">
-                  <CardHeader>
-                    <CardTitle>Revenue Overview</CardTitle>
-                  </CardHeader>
-                  <CardContent className="pl-2">
-                  </CardContent>
-                </Card>
-                <Card className="col-span-3">
-                  <CardHeader>
-                    <CardTitle>User Growth</CardTitle>
-                    <CardDescription>Monthly active users over time</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                  </CardContent>
-                </Card>
               </div>
             </TabsContent>
           </Tabs>
